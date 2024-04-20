@@ -1,7 +1,7 @@
 const User = require("../models/UserSchema.js"); // Importing UserSchema model directly
 const bcryptjs =require('bcryptjs');
-
- const Signup = async (req, res) => {
+const error=require('../utils/error');
+ const Signup = async (req, res,next) => {
 
    console.log("req body",req.body)
     const { username, email, password } = req.body;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -16,12 +16,35 @@ const SignUp = () => {
       ...prevFormData,
       [id]: value
     }));
-  };
-
-  const handleSubmit = (e) => {
+  };console.log(formData);
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   
+    try{
+      setLoading(true);
+    const res = await fetch('api/auth/signup', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
+  
+    const data = await res.json();
+    if(data.success===false){
+      setLoading(false);
+      setError(data.message);
+      Navigate('/sign-in');
+      return;
+    }
+    console.log(data);
+  }catch(err){
+    setLoading(false);
+    setError(err.message);
+  }
   };
+  
+ 
+  
 
   return (
     <div className='p-4 max-w-lg mx-auto'>
@@ -52,14 +75,12 @@ const SignUp = () => {
           onChange={handleChange}
         />
         <button
-          type='submit'
-          className={`bg-slate-700 text-white rounded-lg p-4 uppercase ${
-            loading ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-95'
-          }`}
-          disabled={loading}
+        type='submit'
+        className='bg-slate-700 text-white rounded-lg p-4 uppercase hover:opacity-95 disabled:opacity-80'
         >
-          Sign Up
-        </button>
+  {loading ? 'loading....' : 'Sign Up'}
+</button>
+
       </form>
 
       {error && (
