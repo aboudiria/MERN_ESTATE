@@ -4,9 +4,9 @@ const UserSchema = new schema(
     {
         username:{
             type : String, 
-            required : [true, "the username is required"],
+            required : [false, "the username is required"],
             trim : true, 
-            unique:true,
+             unique:true,
             minlenght : 3,
             maxlength : 50,
            
