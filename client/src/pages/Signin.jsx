@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-
+import { useDispatch, useSelector} from 'react-redux';
+import { signInStart,signInSuccess,signInFailure } from '../redux/user/UserSlice';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -8,9 +9,10 @@ const SignIn = () => {
     email: '',
     password: ''
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const{loading, error}=useSelector((state)=>state.user);
+
   const navigate = useNavigate(); // Get the navigate function
+  const dispatch=useDispatch();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -23,7 +25,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch('api/auth/signin', {
         method: "POST",
         headers: {
@@ -34,18 +36,15 @@ const SignIn = () => {
 
       const data = await res.json();
       if (data.success === false) {
-        setLoading(false);
+        dispatch(signInFailure(data.message="email or password is incorrect"));
 
-        setError(data.message="email or password is incorrect");
         return;
       }
-      setLoading(false);
-      setError(null);
+      dispatch(signInSuccess(data));
       navigate('/'); 
       console.log(data);
     } catch (err) {
-      setLoading(false);
-      setError(err.message);
+        dispatch(signInFailure(err.message));
     }
   };
 
