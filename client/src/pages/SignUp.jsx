@@ -9,6 +9,7 @@ const SignUp = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // Get the navigate function
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -16,35 +17,35 @@ const SignUp = () => {
       ...prevFormData,
       [id]: value
     }));
-  };console.log(formData);
+  };
+ console.log(formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
+    try {
       setLoading(true);
-    const res = await fetch('api/auth/signup', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-    });
-  
-    const data = await res.json();
-    if(data.success===false){
+      const res = await fetch('api/auth/signup', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+      if (data.success === false) {
+        setLoading(false);
+        setError(data.message);
+        return;
+      }
       setLoading(false);
-      setError(data.message);
-      Navigate('/sign-in');
-      return;
+      setError(null);
+      navigate('/sign-in'); // Use navigate function to navigate to sign-in page
+      console.log(data);
+    } catch (err) {
+      setLoading(false);
+      setError(err.message);
     }
-    console.log(data);
-  }catch(err){
-    setLoading(false);
-    setError(err.message);
-  }
   };
-  
- 
-  
 
   return (
     <div className='p-4 max-w-lg mx-auto'>
@@ -75,12 +76,12 @@ const SignUp = () => {
           onChange={handleChange}
         />
         <button
-        type='submit'
-        className='bg-slate-700 text-white rounded-lg p-4 uppercase hover:opacity-95 disabled:opacity-80'
+          disabled={loading}
+          type='submit'
+          className='bg-slate-700 text-white rounded-lg p-4 uppercase hover:opacity-95 disabled:opacity-80'
         >
-  {loading ? 'loading....' : 'Sign Up'}
-</button>
-
+          {loading ? 'loading....' : 'Sign Up'}
+        </button>
       </form>
 
       {error && (

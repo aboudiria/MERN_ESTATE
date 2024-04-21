@@ -19,4 +19,14 @@ const error=require('../utils/error');
    res.status(500).json(error.message);
  };
 }; 
+
+
+const SignIn=async(req,res,next)=>{
+
+    const { email, password }=req.body;
+    
+
+ };
+
 module.exports=Signup;
+ module.exports=SignIn;
