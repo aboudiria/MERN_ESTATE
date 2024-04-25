@@ -1,15 +1,15 @@
 const express=require("express");
 const DB=require("./database");
- 
-const AuthControlers=require('./controlers/AuthControlers');
+
+const authControlers =require('./controlers/AuthControlers.js');
 
 DB();
  
 const app = express();
 app.use(express.json());
-app.use('/api/auth',AuthControlers.SignIn);
-app.use('/api/auth',AuthControlers.Signup);
-app.use((err,req,res,next)=>{
+app.use('/api/auth',authControlers.SignIn);
+app.use('/api/auth',authControlers.Signup);
+app.use((err,req,res,next)=>{ 
      const statusCode=err.statusCode || 500;
      const message=err.message ||"Internal server error";
      return res.status(statusCode).json({
@@ -20,5 +20,5 @@ app.use((err,req,res,next)=>{
 });
 app.listen(process.env.PORT,()=>{
   
-     console.log("server is runnig on port 3000");  
+     console.log("server is running on port 3000");  
 })

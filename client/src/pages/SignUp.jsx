@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -18,7 +18,7 @@ const SignUp = () => {
       [id]: value
     }));
   };
- console.log(formData);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -30,7 +30,7 @@ const SignUp = () => {
         },
         body: JSON.stringify(formData)
       });
-
+      
       const data = await res.json();
       if (data.success === false) {
         setLoading(false);
@@ -41,6 +41,7 @@ const SignUp = () => {
       setError(null);
       navigate('/sign-in'); // Use navigate function to navigate to sign-in page
       console.log(data);
+      console.log(res);
     } catch (err) {
       setLoading(false);
       setError(err.message);
@@ -54,25 +55,25 @@ const SignUp = () => {
         <input
           type='text'
           placeholder='Username'
+          name='username'
           className='border p-3 rounded-lg'
-          id='username'
-          value={formData.username}
+          id='_username'
           onChange={handleChange}
         />
         <input
           type='text'
           placeholder='Email'
+          name='email'
           className='border p-3 rounded-lg'
-          id='email'
-          value={formData.email}
+          id='_email'
           onChange={handleChange}
         />
         <input
           type='password'
           placeholder='Password'
+          name='password'
           className='border p-3 rounded-lg'
-          id='password'
-          value={formData.password}
+          id='_password'
           onChange={handleChange}
         />
         <button
@@ -83,7 +84,7 @@ const SignUp = () => {
           {loading ? 'loading....' : 'Sign Up'}
         </button>
       </form>
-
+     
       {error && (
         <div className='mt-4 text-red-500'>
           {error}
