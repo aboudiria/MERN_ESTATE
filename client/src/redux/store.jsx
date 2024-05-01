@@ -1,15 +1,13 @@
-
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import userReducer from '../redux/user/UserSlice';
+import userReducer from './user/UserSlice';
+import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { persistStore, persistReducer } from 'redux-persist';
 
-// Install package redux-persist to add data to local storage when used in loading.
 const rootReducer = combineReducers({ user: userReducer });
 
 const persistConfig = {
   key: 'root',
-  storage: storage,
+  storage,
   version: 1,
 };
 
